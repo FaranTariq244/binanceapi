@@ -1,5 +1,6 @@
 package com.green.wallet.binanceapi.controller;
 
+
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.account.Account;
@@ -17,7 +18,7 @@ import java.util.List;
 public class BinanceRestController {
 
     @GetMapping(path = "getAccountBalance")
-    public Account getAccountBalance(@RequestParam(value = "apiKey") String apiKey,@RequestParam(value = "secret") String secret){
+    public Account getAccountBalance(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance(apiKey, secret);
         BinanceApiRestClient client = factory.newRestClient();
         Account account = client.getAccount();
@@ -28,7 +29,7 @@ public class BinanceRestController {
 
 
     @GetMapping(path = "getAllCoins")
-    public List<TickerPrice> getAllCoins(@RequestParam(value = "apiKey") String apiKey,@RequestParam(value = "secret") String secret){
+    public List<TickerPrice> getAllCoins(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance(apiKey, secret);
         BinanceApiRestClient client = factory.newRestClient();
         List<TickerPrice> allPrices = client.getAllPrices();
@@ -39,7 +40,7 @@ public class BinanceRestController {
 
 
     @GetMapping(path = "/getCoinPrice")
-    public TickerStatistics getCoinPrice(@RequestParam(value = "coin") String coin,@RequestParam(value = "apiKey") String apiKey,@RequestParam(value = "secret") String secret){
+    public TickerStatistics getCoinPrice(@RequestParam(value = "coin") String coin, @RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance(apiKey, secret);
         BinanceApiRestClient client = factory.newRestClient();
         TickerStatistics tickerStatistics = client.get24HrPriceStatistics(coin);//NEOETH
