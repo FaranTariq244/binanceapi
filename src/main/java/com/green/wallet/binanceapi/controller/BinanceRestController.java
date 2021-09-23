@@ -23,7 +23,7 @@ public class BinanceRestController {
     @GetMapping(path = "getAllTrades")
     public List<Trade> getAllTrades(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret,@RequestParam(value = "coin") String coin){
         BinanceApiRestClient client = getClient(apiKey,secret);
-        List<Trade> myTrades = client.getMyTrades(coin);//BNBUSDT
+        List<Trade> myTrades = client.getMyTrades(coin.toUpperCase());//BNBUSDT
         System.out.println(myTrades);
         return myTrades;
     }
