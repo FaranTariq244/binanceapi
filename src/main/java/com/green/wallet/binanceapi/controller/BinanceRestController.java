@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,6 +56,17 @@ public class BinanceRestController {
         return allPrices;
     }
 
+    @GetMapping(path = "getAllSymbols")
+    public List<String> getAllSymbols(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        List<TickerPrice> allPrices = client.getAllPrices();
+        List<String> symbolList = new ArrayList<>();
+        for(TickerPrice tp: allPrices){
+            symbolList.add(tp.getSymbol());
+        }
+        System.out.println(allPrices);
+        return symbolList;
+    }
 
 
     @GetMapping(path = "/getCoinPrice")
