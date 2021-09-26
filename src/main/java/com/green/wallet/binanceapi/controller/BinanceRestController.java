@@ -3,9 +3,12 @@ package com.green.wallet.binanceapi.controller;
 
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
-import com.binance.api.client.domain.account.Account;
-import com.binance.api.client.domain.account.Trade;
+import com.binance.api.client.constant.BinanceApiConstants;
+import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.request.AllOrderListRequest;
+import com.binance.api.client.domain.account.request.AllOrdersRequest;
 import com.binance.api.client.domain.general.Asset;
+import com.binance.api.client.domain.market.OrderBook;
 import com.binance.api.client.domain.market.TickerPrice;
 import com.binance.api.client.domain.market.TickerStatistics;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +24,21 @@ import java.util.List;
 public class BinanceRestController {
 
 
+
+    @GetMapping(path = "getAllOrders")
+    public List<Order> getAllOrders(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret, @RequestParam(value = "coin") String coin){
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        AllOrdersRequest orderRequest = new AllOrdersRequest(coin);
+        List<Order> lOrders = client.getAllOrders(orderRequest);
+        System.out.println(lOrders);
+        return lOrders;
+    }
+
+
     @GetMapping(path = "getAllTrades")
     public List<Trade> getAllTrades(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret,@RequestParam(value = "coin") String coin){
         BinanceApiRestClient client = getClient(apiKey,secret);
-        List<Trade> myTrades = client.getMyTrades(coin.toUpperCase());//BNBUSDT
+        List<Trade> myTrades = client.getMyTrades(coin.toUpperCase(),1000,null, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,System.currentTimeMillis());//BNBUSDT
         System.out.println(myTrades);
         return myTrades;
     }
@@ -86,7 +100,20 @@ public class BinanceRestController {
         System.out.println(serverTime);
         return serverTime;
     }
-
+    @GetMapping(path = "getHistoricalTrade")
+    public List<TradeHistoryItem> getHistoricalTrade(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret, @RequestParam(value = "coin") String coin){
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        List<TradeHistoryItem> tradeHistoryItems = client.getHistoricalTrades(coin,null,null);
+        System.out.println(tradeHistoryItems);
+        return tradeHistoryItems;
+    }
+    @GetMapping(path = "getOrderBook")
+    public OrderBook getOrderBook(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret, @RequestParam(value = "coin") String coin){
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        OrderBook orderBook = client.getOrderBook(coin,null);
+        System.out.println(orderBook);
+        return orderBook;
+    }
     private BinanceApiRestClient getClient(String APIKEY, String SECRET){
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance(APIKEY, SECRET);
         return factory.newRestClient();
