@@ -25,6 +25,28 @@ public class BinanceRestController {
 
 
 
+    @GetMapping(path = "setUsdtHistory")
+    public boolean setUsdtHistory(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
+        boolean completed = false;
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        List<String> symbols = getAllSymbols(apiKey,secret);
+        List<String> usdtSymbols = new ArrayList<>();
+        if (symbols.size()>0){
+            for (String s: symbols){
+                if (s.contains("USDT")){
+                    usdtSymbols.add(s);
+                }
+            }
+        }
+        if (usdtSymbols.size()>0){
+            for (String s: usdtSymbols){
+
+            }
+        }
+
+        return completed;
+    }
+
     @GetMapping(path = "getAllOrders")
     public List<Order> getAllOrders(@RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret, @RequestParam(value = "coin") String coin){
         BinanceApiRestClient client = getClient(apiKey,secret);
@@ -91,6 +113,13 @@ public class BinanceRestController {
         return tickerStatistics;
     }
 
+    @GetMapping(path = "getPrice")
+    public String getPrice(@RequestParam(value = "coin") String coin, @RequestParam(value = "apiKey") String apiKey, @RequestParam(value = "secret") String secret){
+        BinanceApiRestClient client = getClient(apiKey,secret);
+        TickerStatistics tickerStatistics = client.get24HrPriceStatistics(coin);//NEOETH
+        System.out.println(tickerStatistics.getLastPrice());
+        return tickerStatistics.getLastPrice();
+    }
 
 
     @GetMapping(path = "getServerTime")
